@@ -1,0 +1,81 @@
+#include <stdio.h>
+#include<string.h>
+
+//Global initialization of genrator polynomial length
+#define N strlen(gen)
+
+//Global declaration of message and generator sequence.
+char msg[33], gen[]="1101";
+
+int main()
+{
+    char divseq[N+1];
+    int i,j,k,l, flag=0;
+
+    //Global declaration of message length variable.
+    int msglen;
+  
+	printf("Enter the received message (<32 bits):");
+  	scanf("%s",msg);
+  	msglen = strlen(msg);
+  	msg[msglen]='\0';
+  	printf("Message is: %s",msg);
+	printf("\nThe genrator sequence is: %s", gen);
+  
+  //Getting length of message sequence.
+  
+  //XOR operation
+    for(j = 0; j<msglen-N; j++){
+      
+  //Got the division sequence
+      if(flag==0){
+      for(k = 0; k<N; k++){
+        divseq[k] = msg[k];
+      }
+        divseq[N] = '\0';
+        flag=1;
+      }
+  //Perform Division ----- XOR
+      
+      if(divseq[0]==gen[0]){
+        
+        for(l = 0 ; l<N ; l++){
+         divseq[l] = ((divseq[l] == gen[l]) ? '0' : '1'); 
+        }
+        
+        for(l = 0 ; l<N ; l++){
+         divseq[l] = divseq[l+1];
+        }
+        divseq[N-1] = msg[N+j];
+        divseq[N] = '\0';
+      }
+      else{
+       
+        for(l = 0 ; l<N ; l++){
+         divseq[l] = divseq[l+1];
+        }
+        divseq[N-1] = msg[N+j];
+        divseq[N] = '\0';
+      }
+    }
+  
+    //Remainder at receiver end
+  
+  	printf("\nRemainder:");
+    for(k = 0; k < N; k++){
+        printf("%c",divseq[k]); 
+    }
+  
+  	if(strcmp(divseq,"0000")==0)
+      printf("\nNo error message received.");
+  
+  	else{
+      printf("\nSyndrome is:");
+      for(k = 0; k < N; k++){
+          printf("%c",divseq[k]); 
+      }
+    }
+  
+	return 0;
+}
+

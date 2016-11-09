@@ -1,0 +1,38 @@
+#include <stdio.h>
+#include <string.h>
+#include <time.h>
+#include <stdlib.h>
+
+//Global initialization of genrator polynomial length
+#define N strlen(gen)
+
+//Global declaration of message and generator sequence.
+char msg[29];
+
+int main()
+{
+    //Global declaration of message length variable.
+    int msglen;
+  
+	printf("Enter the message (<28 bits):");
+  	scanf("%s",msg);
+  	msglen = strlen(msg);
+  	msg[msglen]='\0';
+  
+  //Getting length of message sequence.
+    srand(time(NULL));
+    int r1 = rand() % msglen;
+
+    char temp = msg[r1];
+    if(temp == '0')
+      temp = '1';
+    else
+      temp = '0';
+
+    msg[r1] = temp;
+
+    printf("New message sequence:%s",msg);
+	return 0;
+}
+
+

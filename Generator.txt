@@ -1,0 +1,83 @@
+#include <stdio.h>
+#include<string.h>
+
+//Global initialization of genrator polynomial length
+#define N strlen(gen)
+
+//Global declaration of message and generator sequence.
+char msg[29], gen[]="1101";
+
+int main()
+{
+    char divseq[N+1];
+    int i,j,k,l, flag=0;
+
+    //Global declaration of message length variable.
+    int msglen;
+  
+	printf("Enter the message (<28 bits):");
+  	scanf("%s",msg);
+  	msglen = strlen(msg);
+  	msg[msglen]='\0';
+	printf("The genrator sequence is: %s", gen);
+  
+  //Getting length of message sequence.
+  
+  //Appending the messgae sequence with generator polynomial degree.
+    for(i =0; i<N-1;i++){
+		msg[msglen+i] = '0';
+    }
+  
+  	printf("\nThe new code is: %s",msg);
+  	
+  	int newmsglen = strlen(msg);
+  
+  //XOR operation
+    for(j = 0; j<newmsglen-N; j++){
+      
+  //Got the division sequence
+      if(flag==0){
+      for(k = 0; k<N; k++){
+        divseq[k] = msg[k];
+      }
+        flag=1;
+        divseq[N] = '\0';
+      }
+  //Perform Division ----- XOR
+      
+      if(divseq[0]==gen[0]){
+        
+        for(l = 0 ; l<N ; l++){
+         divseq[l] = ((divseq[l] == gen[l]) ? '0' : '1'); 
+        }
+        
+        for(l = 0 ; l<N ; l++){
+         divseq[l] = divseq[l+1];
+        }
+        divseq[N-1] = msg[N+j];
+        divseq[N] = '\0';
+      }
+      else{
+       
+        for(l = 0 ; l<N ; l++){
+         divseq[l] = divseq[l+1];
+        }
+        divseq[N-1] = msg[N+j];
+        divseq[N] = '\0';
+      }
+    }
+  
+    //Sequence For transmission
+    for(k = 0; k < N; k++){
+          msg[msglen+k] = divseq[k+1];
+    }
+  	msg[newmsglen] = '\0';
+  
+    printf("\nMessage for transmission:");
+
+    for(k = 0; k < newmsglen; k++){
+           printf("%c",msg[k]);
+    }
+  
+	return 0;
+}
